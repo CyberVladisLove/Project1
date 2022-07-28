@@ -1,0 +1,56 @@
+version: '3.9'
+
+services:
+  database:
+    container_name: ${PROJECT_NAME}_database
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: 'app'
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./docker/postgres:/var/lib/postgres
+    networks:
+      - project1
+
+  php:
+    container_name: ${PROJECT_NAME}_php
+    environment:
+      POSTGRES_DB: 'app'
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    ports:
+      - '9000:9000'
+    volumes:
+      - .:/var/www
+      - /app/vendor
+    depends_on:
+      - database
+    networks:
+      - project1
+
+  nginx:
+    container_name: ${PROJECT_NAME}_nginx
+    image: nginx:stable-alpine
+    ports:
+      - '8081:80'
+    volumes:
+      - ./app:/var/www/app
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - database
+    networks:
+      - project1
+
+networks:
+  project1:
+    external: false
