@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -13,14 +16,34 @@ class Product
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @Assert\NotBlank
+     */
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    /**
+     * @Assert\PositiveOrZero
+     */
     #[ORM\Column]
     private ?int $price = null;
 
+    /**
+     * @Assert\Positive
+     */
     #[ORM\Column]
     private ?float $count = null;
+
+    #[ORM\ManyToMany(targetEntity: Guest::class, mappedBy: 'products')]
+    private Collection $guests;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Cheque $cheque = null;
+
+    public function __construct()
+    {
+        $this->guests = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -61,5 +84,48 @@ class Product
         $this->count = $count;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Guest>
+     */
+    public function getGuests(): Collection
+    {
+        return $this->guests;
+    }
+
+    public function addGuest(Guest $guest): self
+    {
+        if (!$this->guests->contains($guest)) {
+            $this->guests->add($guest);
+            $guest->addProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGuest(Guest $guest): self
+    {
+        if ($this->guests->removeElement($guest)) {
+            $guest->removeProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function getCheque(): ?Cheque
+    {
+        return $this->cheque;
+    }
+
+    public function setCheque(?Cheque $cheque): self
+    {
+        $this->cheque = $cheque;
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }

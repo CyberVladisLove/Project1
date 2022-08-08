@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PartyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PartyRepository::class)]
 class Party
@@ -13,6 +14,9 @@ class Party
     #[ORM\Column]
     private ?int $id = null;
 
+    /**
+     * @Assert\NotBlank
+     */
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $name = null;
 

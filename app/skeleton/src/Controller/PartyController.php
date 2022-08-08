@@ -75,4 +75,5 @@ class PartyController extends AbstractController
 
         return $this->redirectToRoute('app_party_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

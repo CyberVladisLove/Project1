@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Guest index{% endblock %}
+
+{% block body %}
+
+        <h1>Гости</h1>
+        <button class="btn_create" >
+            <a href="{{ path('app_guest_new') }}">Создать</a>
+        </button>
+
+        <table class="table">
+            <thead>
+            <tr id="tr">
+                <th>Id</th>
+                <th>Имя</th>
+                <th>Телефон</th>
+                <th>Продукты</th>
+                <th>Действия</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for guest in guests %}
+                <tr id="tr">
+                    <td>{{ guest.id }}</td>
+                    <td>{{ guest.name }}</td>
+                    <td>{{ guest.phone }}</td>
+
+                    <td>
+
+                        <select id="ms" multiple="multiple" size="3" class="form-control">
+                            {% for product in guest.products %}
+                                <option>{{ product.name }}</option>
+                            {% endfor %}
+
+                        </select>
+                    </td>
+
+                    <td>
+                        <button style="margin: 5px">
+                            <a href="{{ path('app_guest_show', {'id': guest.id}) }}">открыть</a>
+                        </button>
+                        <button style="margin: 5px">
+                            <a href="{{ path('app_guest_edit', {'id': guest.id}) }}">изменить</a>
+                        </button>
+
+                    </td>
+                    <td>
+                        {{ include('guest/_delete_form.html.twig') }}
+                    </td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+
+
+
+    <style>
+        .table{
+            font-size:25px;
+            padding: 25px;
+        }
+        .container{
+            margin: 25px;
+        }
+    </style>
+
+{% endblock %}

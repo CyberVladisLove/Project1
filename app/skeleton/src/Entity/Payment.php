@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PaymentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
 class Payment
@@ -17,8 +18,19 @@ class Payment
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
+    /**
+     * @Assert\Positive
+     */
     #[ORM\Column]
     private ?float $value = null;
+
+    #[ORM\ManyToOne(inversedBy: 'incomingPayment')]
+    private ?Guest $fromGuest = null;
+
+    #[ORM\ManyToOne(inversedBy: 'outcommingPayments')]
+    private ?Guest $toGuest = null;
+
+
 
     public function getId(): ?int
     {
@@ -48,4 +60,30 @@ class Payment
 
         return $this;
     }
+
+
+    public function getFromGuest(): ?Guest
+    {
+        return $this->fromGuest;
+    }
+
+    public function setFromGuest(?Guest $fromGuest): self
+    {
+        $this->fromGuest = $fromGuest;
+
+        return $this;
+    }
+
+    public function getToGuest(): ?Guest
+    {
+        return $this->toGuest;
+    }
+
+    public function setToGuest(?Guest $toGuest): self
+    {
+        $this->toGuest = $toGuest;
+
+        return $this;
+    }
+
 }

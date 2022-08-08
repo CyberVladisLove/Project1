@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Product index{% endblock %}
+
+{% block body %}
+
+    <h1>Продукты</h1>
+    <button class="btn_create" >
+        <a href="{{ path('app_product_new') }}">Создать</a>
+    </button>
+
+    <table class="table">
+        <thead>
+            <tr id="tr">
+                <th>Id</th>
+                <th>Имя</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Чек</th>
+                <th>Гости</th>
+                <th>Действия</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr id="tr">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.count }}</td>
+                <td>{{ product.cheque }}</td>
+                <td>
+
+                    <select id="ms" multiple="multiple" size="3" class="form-control" style="width: max-content">
+                        {% for guest in product.guests %}
+                            <option>{{ guest.name }}</option>
+                        {% endfor %}
+
+                    </select>
+                </td>
+                <td>
+                    <button style="margin: 5px">
+                        <a href="{{ path('app_product_show', {'id': product.id}) }}">открыть</a>
+                    </button>
+                    <button style="margin: 5px">
+                        <a href="{{ path('app_product_edit', {'id': product.id}) }}">изменить</a>
+                    </button>
+
+                </td>
+                <td>
+                    {{ include('product/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+
+
+{% endblock %}

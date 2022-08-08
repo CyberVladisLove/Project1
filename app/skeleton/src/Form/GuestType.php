@@ -2,16 +2,14 @@
 
 namespace App\Form;
 
-use App\Entity\Party;
+use App\Entity\Guest;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
-class PartyType extends AbstractType
+class GuestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -20,24 +18,21 @@ class PartyType extends AbstractType
                     'label' => "Имя"
                 ]
             )
-            ->add('dateAt', DateTimeType::class, [
-                    'label' => "Дата"
+            ->add('phone', TextType::class, [
+                    'label' => "Телефон"
                 ]
             )
-            ->add('location', TextType::class, [
-                    'label' => "Место"
+            ->add('products', null, [
+                    'label' => "Продукты"
                 ]
             )
-            ->add('location', TextType::class, [
-                    'label' => "Место"
-                ]
-            );
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Party::class,
+            'data_class' => Guest::class,
         ]);
     }
 }
