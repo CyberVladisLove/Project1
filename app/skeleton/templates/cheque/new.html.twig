@@ -6,14 +6,6 @@
     <h1>Создание нового чека</h1>
 
     {{ include('cheque/_form.html.twig') }}
-    {{ form_start(form) }}
 
-        <h3>Продукты</h3>
-            <ul class="products">
-                {% for p in form.products %}
-                    <li>{{ p.shop }}</li>
-                {%  endfor %}
-            </ul>
-    {{ form_end(form) }}
     <a href="{{ path('app_cheque_index') }}">back to list</a>
 {% endblock %}
