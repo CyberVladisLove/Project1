@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Cheque;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,9 +25,10 @@ class ChequeType extends AbstractType
                     'attr'=> ['class' => 'input']
                 ]
             )
-            ->add('products', null, [
+            ->add('products', CollectionType::class, [
                     'label' => "Продукты",
-                    'attr'=> ['class' => 'input']
+                    'entry_type' => ProductType::class,
+                    'entry_options' => ['label' => false],
                 ]
             )
             ->add('customerGuest', null, [

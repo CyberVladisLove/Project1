@@ -36,6 +36,7 @@ class ChequeController extends AbstractController
 
         return $this->renderForm('cheque/new.html.twig', [
             'cheque' => $cheque,
+
             'form' => $form,
         ]);
     }
@@ -63,6 +64,7 @@ class ChequeController extends AbstractController
         return $this->renderForm('cheque/edit.html.twig', [
             'cheque' => $cheque,
             'form' => $form,
+            'products' => $cheque->getProducts()
         ]);
     }
 
