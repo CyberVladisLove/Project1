@@ -24,10 +24,11 @@ class Payment
     #[ORM\Column]
     private ?float $value = null;
 
-    #[ORM\ManyToOne(inversedBy: 'incomingPayment')]
+
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'incomingPayments')]
     private ?Guest $fromGuest = null;
 
-    #[ORM\ManyToOne(inversedBy: 'outcommingPayments')]
+    #[ORM\ManyToOne(cascade: ['persist'],inversedBy: 'outcommingPayments')]
     private ?Guest $toGuest = null;
 
 

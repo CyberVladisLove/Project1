@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Cheque;
 use App\Form\ChequeType;
 use App\Repository\ChequeRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/cheque')]
 class ChequeController extends AbstractController
@@ -43,14 +45,18 @@ class ChequeController extends AbstractController
     #[Route('/{id}', name: 'app_cheque_show', methods: ['GET'])]
     public function show(Cheque $cheque): Response
     {
+        $this->denyAccessUnlessGranted('VIEW', $cheque);
         return $this->render('cheque/show.html.twig', [
             'cheque' => $cheque,
         ]);
     }
 
+
     #[Route('/{id}/edit', name: 'app_cheque_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Cheque $cheque, ChequeRepository $chequeRepository): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $cheque);
+
         $form = $this->createForm(ChequeType::class, $cheque);
         $form->handleRequest($request);
 

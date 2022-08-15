@@ -15,15 +15,18 @@ class GuestType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                    'label' => "Имя"
+                    'label' => "Имя",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('phone', TextType::class, [
-                    'label' => "Телефон"
+                    'label' => "Телефон",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('products', null, [
-                    'label' => "Продукты"
+                    'label' => "Продукты",
+                    'attr'=> ['class' => 'input']
                 ]
             )
         ;

@@ -34,6 +34,8 @@
         <a href="{{ path('app_product_index') }}">Продукты</a>
         <a href="{{ path('app_payment_index') }}">Платежи</a>
         <a href="{{ path('app_cheque_index') }}">Чеки</a>
+        <a href="{{ path('app_user_index') }}">Пользователи</a>
+
     </div>
 
 
@@ -97,7 +99,7 @@
         }
         form{
             width: max-content;
-            display: block;
+            margin: 0 auto;
         }
         button{
             border-radius: 7px/7px;
@@ -111,6 +113,10 @@
         }
         a:hover{
             text-decoration: none;
+        }
+        .form_input{
+            border: #6E6E6E;
+            border-radius: 4px/4px;
         }
     </style>
 </html>

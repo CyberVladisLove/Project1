@@ -20,19 +20,23 @@ class PaymentType extends AbstractType
     {
         $builder
             ->add('date', DateTimeType::class, [
-                    'label' => "Дата"
+                    'label' => "Дата",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('value', IntegerType::class, [
-                    'label' => "Сумма"
+                    'label' => "Сумма",
+                    'attr'=> ['class' => 'input']
                 ]
             )
-            ->add('fromGuest', null, [
-                    'label' => "Отправитель"
+            ->add('fromGuest', GuestType::class, [
+                    'label' => "Отправитель",
+                    'attr'=> ['class' => 'form_input']
                 ]
             )
             ->add('toGuest', null, [
-                    'label' => "Получатель"
+                    'label' => "Получатель",
+                    'attr'=> ['class' => 'input']
                 ]
             )
 

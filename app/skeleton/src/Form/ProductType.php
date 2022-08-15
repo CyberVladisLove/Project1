@@ -20,23 +20,28 @@ class ProductType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => "Имя"
+                'label' => "Имя",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('price', IntegerType::class, [
-                'label' => "Цена"
+                'label' => "Цена",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('count', NumberType::class, [
-                    'label' => "Количество"
+                    'label' => "Количество",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('cheque', null, [
-                    'label' => "Чек"
+                    'label' => "Чек",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('guests',null, [
-                    'label' => "Гости"
+                    'label' => "Гости",
+                    'attr'=> ['class' => 'input']
 
                 ]
             )

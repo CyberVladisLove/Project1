@@ -17,19 +17,23 @@ class PartyType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                    'label' => "Имя"
+                    'label' => "Имя",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('dateAt', DateTimeType::class, [
-                    'label' => "Дата"
+                    'label' => "Дата",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('location', TextType::class, [
-                    'label' => "Место"
+                    'label' => "Место",
+                    'attr'=> ['class' => 'input']
                 ]
             )
             ->add('location', TextType::class, [
-                    'label' => "Место"
+                    'label' => "Место",
+                    'attr'=> ['class' => 'input']
                 ]
             );
     }
