@@ -25,6 +25,7 @@ class ProductController extends AbstractController
     public function new(Request $request, ProductRepository $productRepository): Response
     {
         $product = new Product();
+        $this->denyAccessUnlessGranted('NEW', $product);
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -43,6 +44,7 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_show', methods: ['GET'])]
     public function show(Product $product): Response
     {
+        $this->denyAccessUnlessGranted('VIEW', $product);
         return $this->render('product/show.html.twig', [
             'product' => $product,
         ]);
@@ -51,6 +53,7 @@ class ProductController extends AbstractController
     #[Route('/{id}/edit', name: 'app_product_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, ProductRepository $productRepository): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $product);
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
@@ -69,6 +72,7 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product, ProductRepository $productRepository): Response
     {
+        $this->denyAccessUnlessGranted('DEL', $product);
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $productRepository->remove($product, true);
         }

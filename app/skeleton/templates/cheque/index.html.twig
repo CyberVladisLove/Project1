@@ -16,6 +16,7 @@
                 <th>Магазин</th>
                 <th>Продукты</th>
                 <th>Покупатель</th>
+                <th>Автор</th>
                 <th>Действия</th>
                 <th></th>
             </tr>
@@ -36,7 +37,8 @@
                     </select>
                 </td>
                 <td>{{ cheque.customerGuest }}</td>
-                <td width="350px">
+                <td>{{ cheque.author }}</td>
+                <td>
                     <button style="margin: 5px">
                         <a href="{{ path('app_cheque_show', {'id': cheque.id}) }}">открыть</a>
                     </button>

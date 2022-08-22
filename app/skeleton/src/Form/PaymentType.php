@@ -40,6 +40,7 @@ class PaymentType extends AbstractType
                 ]
             )
 
+
         ;
     }
 

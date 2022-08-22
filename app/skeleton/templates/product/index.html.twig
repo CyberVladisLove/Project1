@@ -18,6 +18,7 @@
                 <th>Количество</th>
                 <th>Чек</th>
                 <th>Гости</th>
+                <th>Автор</th>
                 <th>Действия</th>
                 <th></th>
             </tr>
@@ -39,6 +40,7 @@
 
                     </select>
                 </td>
+                <td>{{ product.author }}</td>
                 <td>
                     <button style="margin: 5px">
                         <a href="{{ path('app_product_show', {'id': product.id}) }}">открыть</a>

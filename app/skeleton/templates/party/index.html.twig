@@ -14,7 +14,10 @@
                 <th>Id</th>
                 <th>Имя</th>
                 <th>Дата</th>
+                <th>Дата создания</th>
                 <th>Место</th>
+                <th>Гости</th>
+                <th>Автор</th>
                 <th>Действия</th>
                 <th></th>
             </tr>
@@ -25,8 +28,19 @@
                 <td>{{ party.id }}</td>
                 <td>{{ party.name }}</td>
                 <td>{{ party.dateAt ? party.dateAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ party.createdAt ? party.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ party.location }}</td>
-                <td width="350px">
+                <td>
+
+                    <select id="ms" multiple="multiple" size="3" class="form-control">
+                        {% for guest in party.guests %}
+                            <option>{{ guest.name }}</option>
+                        {% endfor %}
+
+                    </select>
+                </td>
+                <td>{{ party.author }}</td>
+                <td>
                     <button style="margin: 5px">
                         <a href="{{ path('app_party_show', {'id': party.id}) }}">открыть</a>
                     </button>

@@ -25,6 +25,7 @@ class PartyController extends AbstractController
     public function new(Request $request, PartyRepository $partyRepository): Response
     {
         $party = new Party();
+        $this->denyAccessUnlessGranted('NEW', $party);
         $form = $this->createForm(PartyType::class, $party);
         $form->handleRequest($request);
 
@@ -43,6 +44,7 @@ class PartyController extends AbstractController
     #[Route('/{id}', name: 'app_party_show', methods: ['GET'])]
     public function show(Party $party): Response
     {
+        $this->denyAccessUnlessGranted('VIEW', $party);
         return $this->render('party/show.html.twig', [
             'party' => $party,
         ]);
@@ -51,6 +53,7 @@ class PartyController extends AbstractController
     #[Route('/{id}/edit', name: 'app_party_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Party $party, PartyRepository $partyRepository): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $party);
         $form = $this->createForm(PartyType::class, $party);
         $form->handleRequest($request);
 
@@ -69,6 +72,7 @@ class PartyController extends AbstractController
     #[Route('/{id}', name: 'app_party_delete', methods: ['POST'])]
     public function delete(Request $request, Party $party, PartyRepository $partyRepository): Response
     {
+        $this->denyAccessUnlessGranted('DEL', $party);
         if ($this->isCsrfTokenValid('delete'.$party->getId(), $request->request->get('_token'))) {
             $partyRepository->remove($party, true);
         }

@@ -2,14 +2,16 @@
 
 namespace App\Entity;
 
+use App\Interface\IHaveAuthor;
 use App\Repository\ChequeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+;
 
 #[ORM\Entity(repositoryClass: ChequeRepository::class)]
-class Cheque
+class Cheque implements IHaveAuthor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,6 +30,9 @@ class Cheque
 
     #[ORM\OneToMany(mappedBy: 'cheque', targetEntity: Product::class)]
     private Collection $products;
+
+    #[ORM\ManyToOne(inversedBy: 'authorForCheques')]
+    private ?User $author = null;
 
     public function __construct()
     {
@@ -107,6 +112,18 @@ class Cheque
     public function __toString(): string
     {
         return $this->getId() .")". $this->getShop() ." ". $this->getCustomerGuest();
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 
 }

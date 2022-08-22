@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/cheque')]
 class ChequeController extends AbstractController
@@ -27,8 +28,12 @@ class ChequeController extends AbstractController
     public function new(Request $request, ChequeRepository $chequeRepository): Response
     {
         $cheque = new Cheque();
+
+
+        $this->denyAccessUnlessGranted('NEW', $cheque);
         $form = $this->createForm(ChequeType::class, $cheque);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $chequeRepository->add($cheque, true);
@@ -75,6 +80,7 @@ class ChequeController extends AbstractController
     #[Route('/{id}', name: 'app_cheque_delete', methods: ['POST'])]
     public function delete(Request $request, Cheque $cheque, ChequeRepository $chequeRepository): Response
     {
+        $this->denyAccessUnlessGranted('DEL', $cheque);
         if ($this->isCsrfTokenValid('delete'.$cheque->getId(), $request->request->get('_token'))) {
             $chequeRepository->remove($cheque, true);
         }

@@ -6,10 +6,11 @@ use App\Repository\GuestRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Interface\IHaveAuthor;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GuestRepository::class)]
-class Guest
+class Guest implements IHaveAuthor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -40,12 +41,22 @@ class Guest
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'guests')]
     private Collection $products;
 
+    #[ORM\ManyToOne(inversedBy: 'guests')]
+    private ?User $author = null;
+
+    #[ORM\ManyToOne(inversedBy: 'forGuests')]
+    private ?User $byUser = null;
+
+    #[ORM\ManyToMany(targetEntity: Party::class, mappedBy: 'guests')]
+    private Collection $parties;
+
     public function __construct()
     {
         $this->incomingPayments = new ArrayCollection();
         $this->outcommingPayments = new ArrayCollection();
         $this->cheques = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->parties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,6 +203,57 @@ class Guest
     public function removeProduct(Product $product): self
     {
         $this->products->removeElement($product);
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    public function getByUser(): ?User
+    {
+        return $this->byUser;
+    }
+
+    public function setByUser(?User $byUser): self
+    {
+        $this->byUser = $byUser;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Party>
+     */
+    public function getParties(): Collection
+    {
+        return $this->parties;
+    }
+
+    public function addParty(Party $party): self
+    {
+        if (!$this->parties->contains($party)) {
+            $this->parties->add($party);
+            $party->addGuest($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParty(Party $party): self
+    {
+        if ($this->parties->removeElement($party)) {
+            $party->removeGuest($this);
+        }
 
         return $this;
     }

@@ -25,6 +25,7 @@ class PaymentController extends AbstractController
     public function new(Request $request, PaymentRepository $paymentRepository): Response
     {
         $payment = new Payment();
+        $this->denyAccessUnlessGranted('NEW', $payment);
         $form = $this->createForm(PaymentType::class, $payment);
         $form->handleRequest($request);
 
@@ -45,6 +46,7 @@ class PaymentController extends AbstractController
     #[Route('/{id}', name: 'app_payment_show', methods: ['GET'])]
     public function show(Payment $payment): Response
     {
+        $this->denyAccessUnlessGranted('VIEW', $payment);
         return $this->render('payment/show.html.twig', [
             'payment' => $payment,
         ]);
@@ -53,6 +55,7 @@ class PaymentController extends AbstractController
     #[Route('/{id}/edit', name: 'app_payment_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Payment $payment, PaymentRepository $paymentRepository): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $payment);
         $form = $this->createForm(PaymentType::class, $payment);
         $form->handleRequest($request);
 
@@ -71,6 +74,7 @@ class PaymentController extends AbstractController
     #[Route('/{id}', name: 'app_payment_delete', methods: ['POST'])]
     public function delete(Request $request, Payment $payment, PaymentRepository $paymentRepository): Response
     {
+        $this->denyAccessUnlessGranted('DEL', $payment);
         if ($this->isCsrfTokenValid('delete'.$payment->getId(), $request->request->get('_token'))) {
             $paymentRepository->remove($payment, true);
         }

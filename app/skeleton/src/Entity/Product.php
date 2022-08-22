@@ -6,10 +6,11 @@ use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Interface\IHaveAuthor;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-class Product
+class Product implements IHaveAuthor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,6 +40,9 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Cheque $cheque = null;
+
+    #[ORM\ManyToOne(inversedBy: 'authorForProducts')]
+    private ?User $author = null;
 
     public function __construct()
     {
@@ -127,5 +131,17 @@ class Product
     public function __toString(): string
     {
         return $this->getName();
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }

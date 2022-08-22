@@ -29,6 +29,13 @@ class GuestType extends AbstractType
                     'attr'=> ['class' => 'input']
                 ]
             )
+            ->add('byUser', null, [
+                    'label' => "Пользователь",
+                    'attr'=> ['class' => 'input']
+                ]
+            )
+
+
         ;
     }
 

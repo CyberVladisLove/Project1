@@ -16,6 +16,8 @@
                 <th>Имя</th>
                 <th>Телефон</th>
                 <th>Продукты</th>
+                <th>Пользователь</th>
+                <th>Автор</th>
                 <th>Действия</th>
                 <th></th>
             </tr>
@@ -36,7 +38,8 @@
 
                         </select>
                     </td>
-
+                    <td>{{ guest.byUser }}</td>
+                    <td>{{ guest.author }}</td>
                     <td>
                         <button style="margin: 5px">
                             <a href="{{ path('app_guest_show', {'id': guest.id}) }}">открыть</a>

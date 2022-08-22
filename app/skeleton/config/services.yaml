@@ -22,3 +22,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\EventListener\EntitySubscriber:
+        tags:
+            - name: 'doctrine.event_listener'
+                # это единственная обязательная опция тега слушателя жизненного цикла
+              event: 'prePersist'
+
+                # слушатели могут определять свою приоритетность в случае, если несколько слушателей
+                # связаны с одним событием (приоритет по умолчанию = 0; чем больше цифра = тем раньше запускается слушатель)
+              priority: 500
+
+                # вы также можете ограничить слушателей по определенному соединению Doctrine
+              connection: 'default'

@@ -24,7 +24,9 @@ class GuestController extends AbstractController
     #[Route('/new', name: 'app_guest_new', methods: ['GET', 'POST'])]
     public function new(Request $request, GuestRepository $guestRepository): Response
     {
+
         $guest = new Guest();
+        $this->denyAccessUnlessGranted('NEW',$guest);
         $form = $this->createForm(GuestType::class, $guest);
         $form->handleRequest($request);
 
@@ -43,6 +45,7 @@ class GuestController extends AbstractController
     #[Route('/{id}', name: 'app_guest_show', methods: ['GET'])]
     public function show(Guest $guest): Response
     {
+        $this->denyAccessUnlessGranted('VIEW', $guest);
         return $this->render('guest/show.html.twig', [
             'guest' => $guest,
         ]);
@@ -51,6 +54,7 @@ class GuestController extends AbstractController
     #[Route('/{id}/edit', name: 'app_guest_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Guest $guest, GuestRepository $guestRepository): Response
     {
+        $this->denyAccessUnlessGranted('EDIT', $guest);
         $form = $this->createForm(GuestType::class, $guest);
         $form->handleRequest($request);
 
@@ -69,6 +73,7 @@ class GuestController extends AbstractController
     #[Route('/{id}', name: 'app_guest_delete', methods: ['POST'])]
     public function delete(Request $request, Guest $guest, GuestRepository $guestRepository): Response
     {
+        $this->denyAccessUnlessGranted('DEL', $guest);
         if ($this->isCsrfTokenValid('delete'.$guest->getId(), $request->request->get('_token'))) {
             $guestRepository->remove($guest, true);
         }

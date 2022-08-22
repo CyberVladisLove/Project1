@@ -5,10 +5,11 @@ namespace App\Entity;
 use App\Repository\PaymentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Interface\IHaveAuthor;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PaymentRepository::class)]
-class Payment
+class Payment implements IHaveAuthor
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,6 +31,9 @@ class Payment
 
     #[ORM\ManyToOne(cascade: ['persist'],inversedBy: 'outcommingPayments')]
     private ?Guest $toGuest = null;
+
+    #[ORM\ManyToOne(inversedBy: 'authorForPayments')]
+    private ?User $author = null;
 
 
 
@@ -83,6 +87,18 @@ class Payment
     public function setToGuest(?Guest $toGuest): self
     {
         $this->toGuest = $toGuest;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }

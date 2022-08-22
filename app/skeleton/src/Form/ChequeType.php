@@ -34,6 +34,7 @@ class ChequeType extends AbstractType
                     'attr'=> ['class' => 'input']
                 ]
             )
+
         ;
     }
 

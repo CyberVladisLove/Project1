@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Party;
+use Doctrine\DBAL\Types\DateTimeImmutableType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -31,11 +32,12 @@ class PartyType extends AbstractType
                     'attr'=> ['class' => 'input']
                 ]
             )
-            ->add('location', TextType::class, [
-                    'label' => "Место",
+            ->add('guests', null, [
+                    'label' => "Гости",
                     'attr'=> ['class' => 'input']
                 ]
             );
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -15,6 +15,7 @@
                 <th>Сумма</th>
                 <th>Отправитель</th>
                 <th>Получатель</th>
+                <th>Автор</th>
                 <th>Действия</th>
                 <th></th>
             </tr>
@@ -27,7 +28,8 @@
                 <td>{{ payment.value }}</td>
                 <td>{{ payment.fromGuest }}</td>
                 <td>{{ payment.toGuest }}</td>
-                <td width="350px">
+                <td>{{ payment.author }}</td>
+                <td>
                     <button style="margin: 5px">
                         <a href="{{ path('app_payment_show', {'id': payment.id}) }}">открыть</a>
                     </button>
