@@ -8,7 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ChequeRepository::class)]
 class Cheque implements IHaveAuthor
@@ -22,9 +23,10 @@ class Cheque implements IHaveAuthor
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+
     private ?string $shop = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cheques')]
+    #[ORM\ManyToOne(cascade: ['persist'],inversedBy: 'cheques')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Guest $customerGuest = null;
 

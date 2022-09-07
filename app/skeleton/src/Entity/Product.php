@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Interface\IHaveAuthor;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -21,18 +22,21 @@ class Product implements IHaveAuthor
      * @Assert\NotBlank
      */
     #[ORM\Column(length: 255)]
+    //#[Groups(['indexCheque'])]
     private ?string $name = null;
 
     /**
      * @Assert\PositiveOrZero
      */
     #[ORM\Column]
+    //#[Groups(['indexCheque'])]
     private ?int $price = null;
 
     /**
      * @Assert\Positive
      */
     #[ORM\Column]
+    //#[Groups(['indexCheque'])]
     private ?float $count = null;
 
     #[ORM\ManyToMany(targetEntity: Guest::class, mappedBy: 'products')]

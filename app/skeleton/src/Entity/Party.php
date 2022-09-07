@@ -11,6 +11,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use App\Interface\IHaveAuthor;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\HasLifecycleCallbacks]
@@ -20,12 +21,14 @@ class Party implements IHaveAuthor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    //#[Groups(['indexParty'])]
     private ?int $id = null;
 
     /**
      * @Assert\NotBlank
      */
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['indexParty'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

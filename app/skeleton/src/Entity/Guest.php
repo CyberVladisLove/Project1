@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Interface\IHaveAuthor;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: GuestRepository::class)]
@@ -15,12 +17,14 @@ class Guest implements IHaveAuthor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    //#[Groups(['indexCheque','indexParty'])]
     private ?int $id = null;
 
     /**
      * @Assert\NotBlank
      */
     #[ORM\Column(length: 255)]
+    #[Groups(['indexCheque','indexParty'])]
     private ?string $name = null;
 
     /**
@@ -29,25 +33,34 @@ class Guest implements IHaveAuthor
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $phone = null;
 
+
     #[ORM\OneToMany(mappedBy: 'fromGuest', targetEntity: Payment::class)]
+    #[Ignore]
     private Collection $incomingPayments;
 
+
     #[ORM\OneToMany(mappedBy: 'toGuest', targetEntity: Payment::class)]
+    #[Ignore]
     private Collection $outcommingPayments;
 
     #[ORM\OneToMany(mappedBy: 'customerGuest', targetEntity: Cheque::class)]
+    #[Ignore]
     private Collection $cheques;
 
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'guests')]
+    #[Ignore]
     private Collection $products;
 
-    #[ORM\ManyToOne(inversedBy: 'guests')]
+    #[ORM\ManyToOne(inversedBy: 'AuthorForGuests')]
+    #[Ignore]
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'forGuests')]
+    #[Ignore]
     private ?User $byUser = null;
 
     #[ORM\ManyToMany(targetEntity: Party::class, mappedBy: 'guests')]
+    #[Ignore]
     private Collection $parties;
 
     public function __construct()

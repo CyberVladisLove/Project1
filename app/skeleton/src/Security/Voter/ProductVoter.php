@@ -23,18 +23,20 @@ class ProductVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
+        return true;
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
             return false;
         }
-        return true;
+
         $product = $subject;
         switch ($attribute) {
             case self::DEL:
             case self::EDIT:
                 return
                     in_array('ROLE_ADMIN', $user->getRoles())
+                    || $product->getAuthor() != null
                     || $user->getUserIdentifier() == $product->getAuthor()->getUserIdentifier();
 
             case self::NEW:

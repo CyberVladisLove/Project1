@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -30,22 +31,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'Author', targetEntity: Guest::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Guest::class)]
+    #[Ignore]
     private Collection $AuthorForGuests;
 
     #[ORM\OneToMany(mappedBy: 'byUser', targetEntity: Guest::class)]
+    #[Ignore]
     private Collection $IsForGuests;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Cheque::class)]
+    #[Ignore]
     private Collection $authorForCheques;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Product::class)]
+    #[Ignore]
     private Collection $authorForProducts;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Payment::class)]
+    #[Ignore]
     private Collection $authorForPayments;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Party::class)]
+    #[Ignore]
     private Collection $authorForParties;
 
     public function __construct()
