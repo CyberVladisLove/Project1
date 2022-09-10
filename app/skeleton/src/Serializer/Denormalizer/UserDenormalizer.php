@@ -10,9 +10,14 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class UserDenormalizer extends AbstractDenormalizer
+class UserDenormalizer implements DenormalizerInterface
 {
-
+    /**
+     * UserDenormalizer constructor.
+     */
+    public function __construct(protected EntityManagerInterface $em)
+    {
+    }
 
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
