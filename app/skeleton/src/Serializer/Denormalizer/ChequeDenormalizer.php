@@ -6,21 +6,20 @@ namespace App\Serializer\Denormalizer;
 
 use App\Entity\Cheque;
 use App\Entity\Guest;
-use App\Entity\Payment;
+
 
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class ChequeDenormalizer implements DenormalizerInterface
+
+class ChequeDenormalizer extends AbstractDenormalizer
 {
     /**
-     * ChequeDenormalizer constructor.
+     * @param mixed $data
+     * @param string $type
+     * @param string|null $format
+     * @param array $context
+     * @return Cheque|mixed
      */
-    public function __construct(protected EntityManagerInterface $em)
-    {
-    }
-
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
         if(key_exists('oldEntity', $context)){

@@ -15,17 +15,10 @@ use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class PaymentDenormalizer implements DenormalizerInterface
+class PaymentDenormalizer extends AbstractDenormalizer
 {
-    /**
-     * PaymentDenormalizer constructor.
-     */
-    public function __construct(protected EntityManagerInterface $em)
-    {
-
-    }
-
     /**
      * @param mixed $data
      * @param string $type
@@ -33,7 +26,7 @@ class PaymentDenormalizer implements DenormalizerInterface
      * @param array $context
      * @return Payment
      */
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize(mixed $data, string $type, string $format = null, array $context = []): Payment
     {
         $payment = new Payment();
         $payment->setValue($data['value']);
@@ -42,15 +35,12 @@ class PaymentDenormalizer implements DenormalizerInterface
             if (key_exists('id', $data['fromGuest'])) {
                 $fromGuest = $this->em->find(Guest::class, $data['fromGuest']['id']);
                 if ($fromGuest == null ) {
-                    $fromGuest = new Guest();
-                    $fromGuest->setName($data['fromGuest']['name']);
-                    $fromGuest->setPhone($data['fromGuest']['phone']);
+                    $fromGuest = $this->createGuest($data['toGuest']);
+                    //$fromGuest = $this->jsonToEntity($data['fromGuest'],Guest::class);
                 }
-
             } else {
-                $fromGuest = new Guest();
-                $fromGuest->setName($data['fromGuest']['name']);
-                $fromGuest->setPhone($data['fromGuest']['phone']);
+                $fromGuest = $this->createGuest($data['toGuest']);
+                //$fromGuest = $this->jsonToEntity($data['fromGuest'],Guest::class);
             }
             $payment->setFromGuest($fromGuest);
         }
@@ -59,16 +49,12 @@ class PaymentDenormalizer implements DenormalizerInterface
             if (key_exists('id', $data['toGuest'])) {
                 $toGuest = $this->em->find(Guest::class, $data['toGuest']['id']);
                 if ($toGuest == null) {
-                    $toGuest = new Guest();
-                    $toGuest->setName($data['toGuest']['name']);
-                    $toGuest->setPhone($data['toGuest']['phone']);
+                    $toGuest = $this->createGuest($data['toGuest']);
+                   // $toGuest = $this->jsonToEntity($data['fromGuest'],Guest::class);
                 }
-
             } else {
-
-                $toGuest = new Guest();
-                $toGuest->setName($data['toGuest']['name']);
-                $toGuest->setPhone($data['toGuest']['phone']);
+                $toGuest = $this->createGuest($data['toGuest']);
+                //$toGuest = $this->jsonToEntity($data['fromGuest'],Guest::class);
             }
             $payment->setToGuest($toGuest);
         }
@@ -78,9 +64,18 @@ class PaymentDenormalizer implements DenormalizerInterface
         return $payment;
     }
 
-    public function supportsDenormalization(mixed $data, string $type, string $format = null)
+    public function supportsDenormalization(mixed $data, string $type, string $format = null): bool
     {
         return Payment::class == $type;
     }
+
+    public function createGuest(mixed $jsonGuest): Guest
+    {
+        $guest = new Guest();
+        if (key_exists('user', $jsonGuest)) $guest->setByUser($jsonGuest['user']);
+        if (key_exists('phone', $jsonGuest)) $guest->setPhone($jsonGuest['phone']);
+        return $guest;
+    }
+
 
 }

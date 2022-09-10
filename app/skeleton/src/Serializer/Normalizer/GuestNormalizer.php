@@ -23,6 +23,7 @@ class GuestNormalizer implements NormalizerInterface
             'name' => $object->getName(),
             'phone' => $object->getPhone(),
             'author' => $object->getAuthor(),
+            'user' => $object->getByUser(),
             'products' => $object->getProducts()->toArray(),
 
         ];
