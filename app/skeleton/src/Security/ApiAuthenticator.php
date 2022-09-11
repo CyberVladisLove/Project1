@@ -31,27 +31,22 @@ class ApiAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('apikey');
+        return $request->headers->has('token');
     }
 
     public function authenticate(Request $request): Passport
     {
-        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $request->headers->get('apikey')]);
-        //if($user == null){
-       //     throw new AuthenticationException("Пользователь не найден");
-            //$this->onAuthenticationFailure($request, new AuthenticationException("Пользователь не найден"));
-            //return new SelfValidatingPassport(     );
-       // }
-       // else{
-        $password = $request->query->get('password');
-        $passwordStr = strval($password);
-        //$hashPassword = $this->hasher->hashPassword($user, $password);
-            return new SelfValidatingPassport(
-                new UserBadge($request->headers->get('apikey')),
+        $token = $request->headers->get('token');
+        $user = $this->em->getRepository(User::class)->findOneBy(['token' => $token]);
+        if($user == null){
+            throw new AuthenticationException("Неверный токен пользователя");
+        }
 
-            );
-      //  }
+        return new SelfValidatingPassport(
+            new UserBadge($user->getEmail())
+        );
     }
+
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         /* $data = [

@@ -55,6 +55,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Ignore]
     private Collection $authorForParties;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
     public function __construct()
     {
         $this->AuthorForGuests = new ArrayCollection();
@@ -318,5 +321,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString(): string
     {
         return $this->email;
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(?string $token): self
+    {
+        $this->token = $token;
+
+        return $this;
     }
 }

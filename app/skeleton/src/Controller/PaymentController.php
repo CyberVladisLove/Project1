@@ -41,8 +41,6 @@ class PaymentController extends AbstractController
         ]);
     }
 
-
-
     #[Route('/{id}', name: 'app_payment_show', methods: ['GET'])]
     public function show(Payment $payment): Response
     {
