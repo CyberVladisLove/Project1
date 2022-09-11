@@ -20,7 +20,7 @@ class UserNormalizer implements NormalizerInterface
         $data = [
             'id' => $object->getId(),
             'email' => $object->getEmail(),
-
+            'roles' => $object->getRoles(),
         ];
         return $data;
     }

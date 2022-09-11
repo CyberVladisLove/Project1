@@ -9,6 +9,7 @@ use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,19 +23,27 @@ class PaymentController extends AbstractController
     public function index(PaymentRepository $paymentRepository, NormalizerInterface $normalizer) :Response
     {
         $payments = $paymentRepository->findAll();
-        return $this->json($normalizer->normalize($payments, 'json', [
-
-
-        ]));
+        return $this->json($normalizer->normalize($payments, 'json'));
     }
+
     #[Route('/new', name: 'api_payment_new', methods: ['POST'])]
-    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
+    public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
-        $payment = $serializer->deserialize($request->getContent(), Payment::class, 'json');
+        $newPayment = $serializer->deserialize($request->getContent(), Payment::class, 'json');
 
-
-        $entityManager->persist($payment);
+        $entityManager->persist($newPayment);
         $entityManager->flush();
-        return $this->json($payment, 201);
+
+        return $this->json($newPayment, 201);
+    }
+
+    #[Route('/{id}/edit', name: 'api_payment_edit', methods: ['POST'])]
+    public function edit(Payment $oldPayment, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $editedPayment = $serializer->deserialize($request->getContent(), Payment::class, 'json', ['oldEntity' => $oldPayment]);
+
+        $entityManager->flush();
+
+        return $this->json($editedPayment, 201);
     }
 }

@@ -39,10 +39,10 @@ class Product implements IHaveAuthor
     //#[Groups(['indexCheque'])]
     private ?float $count = null;
 
-    #[ORM\ManyToMany(targetEntity: Guest::class, mappedBy: 'products')]
+    #[ORM\ManyToMany(cascade: ['persist'], targetEntity: Guest::class, mappedBy: 'products')]
     private Collection $guests;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'products')]
     private ?Cheque $cheque = null;
 
     #[ORM\ManyToOne(inversedBy: 'authorForProducts')]

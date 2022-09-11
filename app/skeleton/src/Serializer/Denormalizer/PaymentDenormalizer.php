@@ -16,15 +16,9 @@ use Symfony\Component\Serializer\Exception\RuntimeException;
 use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class PaymentDenormalizer implements DenormalizerInterface
+class PaymentDenormalizer extends AbstractDenormalizer
 {
-    /**
-     * PaymentDenormalizer constructor.
-     */
-    public function __construct(protected EntityManagerInterface $em)
-    {
 
-    }
 
     /**
      * @param mixed $data
@@ -35,8 +29,10 @@ class PaymentDenormalizer implements DenormalizerInterface
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        $payment = new Payment();
-        $payment->setValue($data['value']);
+        $payment = $this->getObject(Payment::class, $context);
+
+        if (key_exists('value', $data)) $payment->setValue($data['value']);
+        if (!key_exists('date', $data)) $payment->setDate(new \DateTimeImmutable());
 
         if (key_exists('fromGuest', $data)) {
             if (key_exists('id', $data['fromGuest'])) {
@@ -74,7 +70,7 @@ class PaymentDenormalizer implements DenormalizerInterface
         }
 
 
-        $payment->setDate(new \DateTimeImmutable());
+
         return $payment;
     }
 

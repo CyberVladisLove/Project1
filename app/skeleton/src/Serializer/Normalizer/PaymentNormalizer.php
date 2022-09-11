@@ -23,13 +23,17 @@ class PaymentNormalizer implements NormalizerInterface
         $data = [
             'id' => $object->getId(),
             'date' => $object->getDate(),
-            'fromGuest' => $object->getToGuest() ? [
+            'value' => $object->getValue(),
+            'fromGuest' => $object->getFromGuest() ? [
                 'id' => $object->getFromGuest()->getId(),
                 'name' => $object->getFromGuest()->getName(),
                 'phone' => $object->getFromGuest()->getPhone()
             ]:null,
-            'toGuest' => $object->getToGuest() ? $object->getToGuest()->getId() : null,
-            'value' => $object->getValue(),
+            'toGuest' => $object->getToGuest() ? [
+                'id' => $object->getToGuest()->getId(),
+                'name' => $object->getToGuest()->getName(),
+                'phone' => $object->getToGuest()->getPhone()
+            ]:null,
             'author' => $object->getAuthor(),
 
         ];

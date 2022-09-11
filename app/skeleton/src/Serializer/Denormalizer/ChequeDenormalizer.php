@@ -12,26 +12,15 @@ use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class ChequeDenormalizer implements DenormalizerInterface
+class ChequeDenormalizer extends AbstractDenormalizer
 {
-    /**
-     * ChequeDenormalizer constructor.
-     */
-    public function __construct(protected EntityManagerInterface $em)
-    {
-    }
 
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        if(key_exists('oldEntity', $context)){
-            $cheque = $context['oldEntity'];
-        }
-        else{
-            $cheque = new Cheque();
-        }
+        $cheque = $this->getObject(Cheque::class, $context);
 
-        $cheque->setDate(new DateTime());
-        $cheque->setShop($data['shop']);
+        if (!key_exists('date', $data)) $cheque->setDate(new DateTime());
+        if (key_exists('shop', $data)) $cheque->setShop($data['shop']);
 
         if (key_exists('customerGuest', $data)) {
             if (key_exists('id', $data['customerGuest'])) {
@@ -43,8 +32,8 @@ class ChequeDenormalizer implements DenormalizerInterface
                 }
             } else {
                 $customerGuest = new Guest();
-                $customerGuest->setName($data['$customerGuest']['name']);
-                $customerGuest->setPhone($data['$customerGuest']['phone']);
+                $customerGuest->setName($data['customerGuest']['name']);
+                $customerGuest->setPhone($data['customerGuest']['phone']);
             }
 
             $cheque->setCustomerGuest($customerGuest);

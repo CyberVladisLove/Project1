@@ -25,7 +25,15 @@ class ProductNormalizer implements NormalizerInterface
     {
         $data = [
             'id' => $object->getId(),
-            'email' => $object->getName(),
+            'name' => $object->getName(),
+            'price' => $object->getPrice(),
+            'count' => $object->getCount(),
+            'cheque' => $object->getCheque()? [
+                'id' => $object->getCheque()->getId(),
+                'shop' => $object->getCheque()->getShop(),
+                'customerGuest' => $object->getCheque()->getCustomerGuest()->getName()
+            ]:null,
+            'author' => $object->getAuthor(),
 
         ];
         return $data;

@@ -22,7 +22,8 @@ class PartyNormalizer implements NormalizerInterface
             'id' => $object->getId(),
             'name' => $object->getName(),
             'date' => $object->getDateAt(),
-            'guests' =>  $object->getGuests(),
+            'createdAt' => $object->getCreatedAt(),
+            'guests' =>  $object->getGuests()->toArray(),
             'author' => $object->getAuthor(),
 
         ];

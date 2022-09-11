@@ -17,7 +17,6 @@ class Guest implements IHaveAuthor
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    //#[Groups(['indexCheque','indexParty'])]
     private ?int $id = null;
 
     /**
@@ -35,32 +34,32 @@ class Guest implements IHaveAuthor
 
 
     #[ORM\OneToMany(mappedBy: 'fromGuest', targetEntity: Payment::class)]
-    #[Ignore]
+
     private Collection $incomingPayments;
 
 
     #[ORM\OneToMany(mappedBy: 'toGuest', targetEntity: Payment::class)]
-    #[Ignore]
+
     private Collection $outcommingPayments;
 
     #[ORM\OneToMany(mappedBy: 'customerGuest', targetEntity: Cheque::class)]
-    #[Ignore]
+
     private Collection $cheques;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'guests')]
-    #[Ignore]
+    #[ORM\ManyToMany(cascade: ['persist'], targetEntity: Product::class, inversedBy: 'guests')]
+
     private Collection $products;
 
     #[ORM\ManyToOne(inversedBy: 'AuthorForGuests')]
-    #[Ignore]
+
     private ?User $author = null;
 
     #[ORM\ManyToOne(inversedBy: 'forGuests')]
-    #[Ignore]
+
     private ?User $byUser = null;
 
     #[ORM\ManyToMany(targetEntity: Party::class, mappedBy: 'guests')]
-    #[Ignore]
+
     private Collection $parties;
 
     public function __construct()

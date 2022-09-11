@@ -40,7 +40,7 @@ class Party implements IHaveAuthor
     #[ORM\ManyToOne(inversedBy: 'authorForParties')]
     private ?User $author = null;
 
-    #[ORM\ManyToMany(targetEntity: Guest::class, inversedBy: 'parties')]
+    #[ORM\ManyToMany(cascade: ['persist'], targetEntity: Guest::class, inversedBy: 'parties')]
     private Collection $guests;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

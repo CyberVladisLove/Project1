@@ -10,18 +10,18 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
-class UserDenormalizer implements DenormalizerInterface
+class UserDenormalizer extends AbstractDenormalizer
 {
-    /**
-     * UserDenormalizer constructor.
-     */
-    public function __construct(protected EntityManagerInterface $em)
-    {
-    }
+
 
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
+        $user = $this->getObject(User::class, $context);
 
+        if (key_exists('email', $data)) $user->setEmail($data['email']);
+
+
+        return $user;
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)

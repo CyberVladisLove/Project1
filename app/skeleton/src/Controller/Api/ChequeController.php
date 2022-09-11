@@ -30,20 +30,20 @@ class ChequeController extends AbstractController
     #[Route('/new', name: 'api_cheque_new', methods: ['POST'])]
     public function new(Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
-        $cheque = $serializer->deserialize($request->getContent(), Cheque::class, 'json');
+        $newCheque = $serializer->deserialize($request->getContent(), Cheque::class, 'json');
 
-        $entityManager->persist($cheque);
+        $entityManager->persist($newCheque);
         $entityManager->flush();
-        return $this->json($cheque, 201);
+        return $this->json($newCheque, 201);
     }
 
     #[Route('/{id}/edit', name: 'api_cheque_edit', methods: ['POST'])]
     public function edit(Cheque $cheque, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager)
     {
-        $chequeFromReq = $serializer->deserialize($request->getContent(), Cheque::class, 'json', ['oldEntity' => $cheque]);
+        $editedCheque = $serializer->deserialize($request->getContent(), Cheque::class, 'json', ['oldEntity' => $cheque]);
 
         $entityManager->flush();
 
-        return $this->json($chequeFromReq, 201);
+        return $this->json($editedCheque, 201);
     }
 }
