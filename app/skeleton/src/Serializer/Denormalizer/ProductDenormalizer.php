@@ -21,43 +21,7 @@ class ProductDenormalizer extends AbstractDenormalizer
 
         $this->setSimpleFields($product, $data);
         $this->setObjectFields($product, $data, $this->em);
-
-        if (key_exists('cheque', $data)) {
-            if (key_exists('id', $data['cheque'])) {
-                $cheque = $this->em->find(Cheque::class, $data['cheque']['id']);
-                if ($cheque == null ) {
-                    $customerGuest = $this->em->find(Guest::class, $data['cheque']['customerGuest']['id']);
-                    $cheque = new Cheque();
-                    $cheque->setCustomerGuest($customerGuest);
-                    ChequeDenormalizer::setSimpleFields($cheque, $data['cheque']);
-                }
-
-            } else {
-                $customerGuest = $this->em->find(Guest::class, $data['cheque']['customerGuest']['id']);
-                $cheque = new Cheque();
-                $cheque->setCustomerGuest($customerGuest);
-                ChequeDenormalizer::setSimpleFields($cheque, $data['cheque']);
-            }
-            $product->setCheque($cheque);
-        }
-
-        if (key_exists('guests', $data)) {
-
-            foreach ($data['guests'] as $guestFromReq) {
-                if (key_exists('id', $guestFromReq)) {
-                    $guest = $this->em->find(Guest::class, $guestFromReq['id']);
-                    if ($guest == null) {
-                        $guest = new Guest();
-                        GuestDenormalizer::setSimpleFields($guest, $guestFromReq);
-                    }
-                } else {
-                    $guest = new Guest();
-                    GuestDenormalizer::setSimpleFields($guest, $guestFromReq);
-                }
-
-                $product->addGuest($guest);
-            }
-        }
+        
         return $product;
     }
     public static function setSimpleFields($object, $data)

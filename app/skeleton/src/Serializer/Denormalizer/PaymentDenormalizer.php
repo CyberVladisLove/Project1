@@ -34,10 +34,6 @@ class PaymentDenormalizer extends AbstractDenormalizer
         $this->setSimpleFields($payment, $data);
         $this->setObjectFields($payment, $data, $this->em);
 
-
-
-
-
         return $payment;
     }
 
