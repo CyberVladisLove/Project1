@@ -21,7 +21,7 @@ class ProductDenormalizer extends AbstractDenormalizer
 
         $this->setSimpleFields($product, $data);
         $this->setObjectFields($product, $data, $this->em);
-        
+
         return $product;
     }
     public static function setSimpleFields($object, $data)

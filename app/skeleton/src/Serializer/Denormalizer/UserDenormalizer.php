@@ -31,6 +31,7 @@ class UserDenormalizer extends AbstractDenormalizer
 
     static function setSimpleFields(mixed $object, $data)
     {
+        $user = $object;
         if (key_exists('email', $data)) $user->setEmail($data['email']);
     }
 }
