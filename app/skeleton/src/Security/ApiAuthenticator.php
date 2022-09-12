@@ -13,6 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -31,7 +32,9 @@ class ApiAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        return $request->headers->has('token');
+        return false;
+        if($request->headers->has('token')) return true;
+        else throw new InvalidCsrfTokenException("Введите ваш токен или залогиньтесь повторно");
     }
 
     public function authenticate(Request $request): Passport
@@ -49,10 +52,6 @@ class ApiAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        /* $data = [
-            'message' => "авторизован"
-        ];
-        return new JsonResponse($data, Response::HTTP_OK); */
         return null;
     }
 

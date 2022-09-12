@@ -5,35 +5,31 @@ namespace App\Serializer\Denormalizer;
 
 
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Exception\BadMethodCallException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\ExtraAttributesException;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\RuntimeException;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 
 abstract class AbstractDenormalizer implements DenormalizerInterface
 {
-
-
     /**
      * AbstractDenormalizer constructor.
      */
     public function __construct(protected EntityManagerInterface $em)
     {
     }
-
+    //позволяет получить редактируемый объект из context или создать новый
     protected function getObject($className, array $context = []){
+
         if(key_exists('oldEntity', $context)){
-            $entity = $context['oldEntity'];
+            $object = $context['oldEntity'];
         }
         else{
-            $entity = new $className();
+            $object = new $className();
         }
-        return $entity;
+        return $object;
     }
+    //методы избавляющие от копипасты кода при денормализации
+    abstract static function setSimpleFields(mixed $object, $data);
+    //abstract static function setObjectFields($object, $data, EntityManagerInterface $em);
+
     abstract function denormalize(mixed $data, string $type, string $format = null, array $context = []);
     abstract function supportsDenormalization(mixed $data, string $type, string $format = null);
 

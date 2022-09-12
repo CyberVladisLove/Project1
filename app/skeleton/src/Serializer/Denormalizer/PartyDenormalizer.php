@@ -20,32 +20,41 @@ class PartyDenormalizer extends AbstractDenormalizer
     {
         $party = $this->getObject(Party::class, $context);
 
-        if (key_exists('name', $data)) $party->setName($data['name']);
-        if (key_exists('location', $data)) $party->setLocation($data['location']);
+        $this->setSimpleFields($party, $data);
+        $this->setObjectFields($party, $data, $this->em);
 
+        return $party;
+    }
+
+
+    public static function setSimpleFields($object, $data)
+    {
+        if (key_exists('name', $data)) $object->setName($data['name']);
+        if (key_exists('location', $data)) $object->setLocation($data['location']);
+    }
+
+    public static function setObjectFields($object, $data, EntityManagerInterface $em)
+    {
+        $party = $object;
         if (key_exists('guests', $data)){
 
             foreach($data['guests'] as $guestFromReq){
                 if (key_exists('id', $guestFromReq)){
-                    $guest = $this->em->find(Guest::class, $guestFromReq['id']);
+                    $guest = $em->find(Guest::class, $guestFromReq['id']);
                     if($guest == null){
                         $guest = new Guest();
-                        $guest->setName($guestFromReq['name']);
-                        $guest->setPhone($guestFromReq['phone']);
+                        GuestDenormalizer::setSimpleFields($guest, $guestFromReq);
                     }
                 }
                 else{
                     $guest = new Guest();
-                    $guest->setName($guestFromReq['name']);
-                    $guest->setPhone($guestFromReq['phone']);
+                    GuestDenormalizer::setSimpleFields($guest, $guestFromReq);
                 }
                 //считаю что если в запросе будет массив гостей,
                 //то их просто добавляю в тусовку, а не заменяю старых на новых
                 $party->addGuest($guest);
             }
-
         }
-        return $party;
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)

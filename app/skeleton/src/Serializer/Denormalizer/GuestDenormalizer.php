@@ -19,26 +19,35 @@ class GuestDenormalizer extends AbstractDenormalizer
     {
         $guest = $this->getObject(Guest::class, $context);
 
-        if (key_exists('phone', $data)) $guest->setPhone($data['phone']);
-        if (key_exists('name', $data)) $guest->setName($data['name']);
+        $this->setSimpleFields($guest, $data);
+        $this->setObjectFields($guest, $data, $this->em);
 
+        return $guest;
+    }
+
+    public static function setSimpleFields($object, $data)
+    {
+        if (key_exists('phone', $data)) $object->setPhone($data['phone']);
+        if (key_exists('name', $data)) $object->setName($data['name']);
+    }
+
+    public static function setObjectFields($object, $data, EntityManagerInterface $em)
+    {
+        $guest = $object;
         if (key_exists('products', $data)){
 
             foreach($data['products'] as $productFromReq){
+
                 if (key_exists('id', $productFromReq)){
-                    $product = $this->em->find(Product::class, $productFromReq['id']);
+                    $product = $em->find(Product::class, $productFromReq['id']);
                     if($product == null){
                         $product = new Product();
-                        $product->setName($productFromReq['name']);
-                        $product->setPrice($productFromReq['price']);
-                        $product->setCount($productFromReq['count']);
+                        ProductDenormalizer::setSimpleFields($product, $productFromReq);
                     }
                 }
                 else{
                     $product = new Product();
-                    $product->setName($productFromReq['name']);
-                    $product->setPrice($productFromReq['price']);
-                    $product->setCount($productFromReq['count']);
+                    ProductDenormalizer::setSimpleFields($product, $productFromReq);
                 }
                 //считаю что если в запросе будет массив продуктов,
                 //то их просто добавляю в гостя, а не заменяю старые на новые
@@ -46,7 +55,6 @@ class GuestDenormalizer extends AbstractDenormalizer
             }
 
         }
-        return $guest;
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)

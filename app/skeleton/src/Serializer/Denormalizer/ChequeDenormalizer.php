@@ -19,28 +19,37 @@ class ChequeDenormalizer extends AbstractDenormalizer
     {
         $cheque = $this->getObject(Cheque::class, $context);
 
-        if (!key_exists('date', $data)) $cheque->setDate(new DateTime());
-        if (key_exists('shop', $data)) $cheque->setShop($data['shop']);
+        $this->setSimpleFields($cheque, $data);
+        $this->setObjectFields($cheque, $data, $this->em);
 
+        return $cheque;
+    }
+
+    public static function setSimpleFields($object, $data)
+    {
+        if (key_exists('date', $data)) $object->setDate($data['date']);
+        else $object->setDate(new DateTime());
+
+        if (key_exists('shop', $data)) $object->setShop($data['shop']);
+    }
+
+    public static function setObjectFields($object, $data, EntityManagerInterface $em)
+    {
+        $cheque = $object;
         if (key_exists('customerGuest', $data)) {
             if (key_exists('id', $data['customerGuest'])) {
-                $customerGuest = $this->em->find(Guest::class, $data['customerGuest']['id']);
+                $customerGuest = $em->find(Guest::class, $data['customerGuest']['id']);
                 if ($customerGuest == null ) {
                     $customerGuest = new Guest();
-                    $customerGuest->setName($data['customerGuest']['name']);
-                    $customerGuest->setPhone($data['customerGuest']['phone']);
+                    GuestDenormalizer::setSimpleFields($customerGuest, $data['customerGuest']);
                 }
             } else {
                 $customerGuest = new Guest();
-                $customerGuest->setName($data['customerGuest']['name']);
-                $customerGuest->setPhone($data['customerGuest']['phone']);
+                GuestDenormalizer::setSimpleFields($customerGuest, $data['customerGuest']);
             }
 
             $cheque->setCustomerGuest($customerGuest);
         }
-
-
-        return $cheque;
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)

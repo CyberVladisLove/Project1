@@ -20,9 +20,8 @@ class ProductDenormalizer extends AbstractDenormalizer
     {
         $product = $this->getObject(Product::class, $context);
 
-        if (key_exists('name', $data)) $product->setName($data['name']);
-        if (key_exists('price', $data)) $product->setPrice($data['price']);
-        if (key_exists('count', $data)) $product->setCount($data['count']);
+        $this->setSimpleFields($product, $data);
+        $this->setObjectFields($guest, $data, $this->em);
 
         if (key_exists('cheque', $data)) {
             if (key_exists('id', $data['cheque'])) {
@@ -31,19 +30,18 @@ class ProductDenormalizer extends AbstractDenormalizer
                     $customerGuest = $this->em->find(Guest::class, $data['cheque']['customerGuest']['id']);
                     $cheque = new Cheque();
                     $cheque->setCustomerGuest($customerGuest);
-                    $cheque->setDate(new \DateTimeImmutable());
-                    $cheque->setShop($data['cheque']['shop']);
+                    ChequeDenormalizer::setSimpleFields($cheque, $data['cheque']);
                 }
 
             } else {
                 $customerGuest = $this->em->find(Guest::class, $data['cheque']['customerGuest']['id']);
                 $cheque = new Cheque();
                 $cheque->setCustomerGuest($customerGuest);
-                $cheque->setDate(new \DateTimeImmutable());
-                $cheque->setShop($data['cheque']['shop']);
+                ChequeDenormalizer::setSimpleFields($cheque, $data['cheque']);
             }
             $product->setCheque($cheque);
         }
+
         if (key_exists('guests', $data)) {
 
             foreach ($data['guests'] as $guestFromReq) {
@@ -51,20 +49,23 @@ class ProductDenormalizer extends AbstractDenormalizer
                     $guest = $this->em->find(Guest::class, $guestFromReq['id']);
                     if ($guest == null) {
                         $guest = new Guest();
-                        $guest->setName($guestFromReq['name']);
-                        $guest->setPhone($guestFromReq['phone']);
+                        GuestDenormalizer::setSimpleFields($guest, $guestFromReq);
                     }
                 } else {
                     $guest = new Guest();
-                    $guest->setName($guestFromReq['name']);
-                    $guest->setPhone($guestFromReq['phone']);
+                    GuestDenormalizer::setSimpleFields($guest, $guestFromReq);
                 }
-
 
                 $product->addGuest($guest);
             }
         }
         return $product;
+    }
+    public static function setSimpleFields($object, $data)
+    {
+        if (key_exists('name', $data)) $object->setName($data['name']);
+        if (key_exists('price', $data)) $object->setPrice($data['price']);
+        if (key_exists('count', $data)) $object->setCount($data['count']);
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)

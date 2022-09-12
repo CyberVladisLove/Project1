@@ -26,17 +26,12 @@ class SecurityController extends AbstractController
             $token = md5(microtime());
             $user->setToken($token);
             $em->flush();
-            return $this->json($token);
+            return $this->json("Ваш токен доступа: " . $token);
         }
         else
         {
             throw new AuthenticationException("Пароль не верный");
         }
-        //$hashPasswordContent = $hasher->hashPassword($user, $content['password']);
-        //if($user->getPassword() == $hashPasswordContent){
-        //    $token = md5(microtime());
-        //    return $this->json($token);
-        //}
 
 
     }

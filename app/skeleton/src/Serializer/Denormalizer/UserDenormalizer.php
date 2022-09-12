@@ -18,7 +18,7 @@ class UserDenormalizer extends AbstractDenormalizer
     {
         $user = $this->getObject(User::class, $context);
 
-        if (key_exists('email', $data)) $user->setEmail($data['email']);
+        $this->setSimpleFields($user, $data);
 
 
         return $user;
@@ -27,5 +27,10 @@ class UserDenormalizer extends AbstractDenormalizer
     public function supportsDenormalization(mixed $data, string $type, string $format = null)
     {
         return User::class == $type;
+    }
+
+    static function setSimpleFields(mixed $object, $data)
+    {
+        if (key_exists('email', $data)) $user->setEmail($data['email']);
     }
 }

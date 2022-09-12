@@ -31,22 +31,19 @@ class PaymentDenormalizer extends AbstractDenormalizer
     {
         $payment = $this->getObject(Payment::class, $context);
 
-        if (key_exists('value', $data)) $payment->setValue($data['value']);
-        if (!key_exists('date', $data)) $payment->setDate(new \DateTimeImmutable());
+        $this->setSimpleFields($payment, $data);
+        $this->setObjectFields($guest, $data, $this->em);
 
         if (key_exists('fromGuest', $data)) {
             if (key_exists('id', $data['fromGuest'])) {
                 $fromGuest = $this->em->find(Guest::class, $data['fromGuest']['id']);
                 if ($fromGuest == null ) {
                     $fromGuest = new Guest();
-                    $fromGuest->setName($data['fromGuest']['name']);
-                    $fromGuest->setPhone($data['fromGuest']['phone']);
+                    GuestDenormalizer::setSimpleFields($fromGuest, $data['fromGuest']);
                 }
-
             } else {
                 $fromGuest = new Guest();
-                $fromGuest->setName($data['fromGuest']['name']);
-                $fromGuest->setPhone($data['fromGuest']['phone']);
+                GuestDenormalizer::setSimpleFields($fromGuest, $data['fromGuest']);
             }
             $payment->setFromGuest($fromGuest);
         }
@@ -56,15 +53,11 @@ class PaymentDenormalizer extends AbstractDenormalizer
                 $toGuest = $this->em->find(Guest::class, $data['toGuest']['id']);
                 if ($toGuest == null) {
                     $toGuest = new Guest();
-                    $toGuest->setName($data['toGuest']['name']);
-                    $toGuest->setPhone($data['toGuest']['phone']);
+                    GuestDenormalizer::setSimpleFields($toGuest, $data['toGuest']);
                 }
-
             } else {
-
                 $toGuest = new Guest();
-                $toGuest->setName($data['toGuest']['name']);
-                $toGuest->setPhone($data['toGuest']['phone']);
+                GuestDenormalizer::setSimpleFields($toGuest, $data['toGuest']);
             }
             $payment->setToGuest($toGuest);
         }
@@ -72,6 +65,13 @@ class PaymentDenormalizer extends AbstractDenormalizer
 
 
         return $payment;
+    }
+
+    public static function setSimpleFields($object, $data)
+    {
+        if (key_exists('value', $data)) $object->setValue($data['value']);
+        if (key_exists('date', $data)) $object->setDate($data['date']);
+        else $object->setDate(new \DateTimeImmutable());
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)
