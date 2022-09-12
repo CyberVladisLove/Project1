@@ -32,11 +32,27 @@ class PaymentDenormalizer extends AbstractDenormalizer
         $payment = $this->getObject(Payment::class, $context);
 
         $this->setSimpleFields($payment, $data);
-        $this->setObjectFields($guest, $data, $this->em);
+        $this->setObjectFields($payment, $data, $this->em);
 
+
+
+
+
+        return $payment;
+    }
+
+    public static function setSimpleFields($object, $data)
+    {
+        if (key_exists('value', $data)) $object->setValue($data['value']);
+        if (key_exists('date', $data)) $object->setDate($data['date']);
+        else $object->setDate(new \DateTimeImmutable());
+    }
+    public static function setObjectFields($object, $data, EntityManagerInterface $em)
+    {
+        $payment = $object;
         if (key_exists('fromGuest', $data)) {
             if (key_exists('id', $data['fromGuest'])) {
-                $fromGuest = $this->em->find(Guest::class, $data['fromGuest']['id']);
+                $fromGuest = $em->find(Guest::class, $data['fromGuest']['id']);
                 if ($fromGuest == null ) {
                     $fromGuest = new Guest();
                     GuestDenormalizer::setSimpleFields($fromGuest, $data['fromGuest']);
@@ -50,7 +66,7 @@ class PaymentDenormalizer extends AbstractDenormalizer
 
         if (key_exists('toGuest', $data)) {
             if (key_exists('id', $data['toGuest'])) {
-                $toGuest = $this->em->find(Guest::class, $data['toGuest']['id']);
+                $toGuest = $em->find(Guest::class, $data['toGuest']['id']);
                 if ($toGuest == null) {
                     $toGuest = new Guest();
                     GuestDenormalizer::setSimpleFields($toGuest, $data['toGuest']);
@@ -61,17 +77,6 @@ class PaymentDenormalizer extends AbstractDenormalizer
             }
             $payment->setToGuest($toGuest);
         }
-
-
-
-        return $payment;
-    }
-
-    public static function setSimpleFields($object, $data)
-    {
-        if (key_exists('value', $data)) $object->setValue($data['value']);
-        if (key_exists('date', $data)) $object->setDate($data['date']);
-        else $object->setDate(new \DateTimeImmutable());
     }
 
     public function supportsDenormalization(mixed $data, string $type, string $format = null)

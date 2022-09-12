@@ -29,6 +29,7 @@ class PartyDenormalizer extends AbstractDenormalizer
 
     public static function setSimpleFields($object, $data)
     {
+        if (key_exists('dateAt', $data)) $object->setDateAt($data['dateAt']);
         if (key_exists('name', $data)) $object->setName($data['name']);
         if (key_exists('location', $data)) $object->setLocation($data['location']);
     }

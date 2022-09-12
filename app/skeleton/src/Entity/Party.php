@@ -140,5 +140,6 @@ class Party implements IHaveAuthor
     public function setCurrentCreatedAt(LifecycleEventArgs $eventArgs){
         date_default_timezone_set('Europe/Saratov');
         $this->setCreatedAt(new DateTime);
+        $this->setDateAt(new DateTime);
     }
 }
