@@ -23,9 +23,9 @@ class GuestVoter extends Voter
 
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
-        return true;
+        //return true;
         $user = $token->getUser();
-        // if the user is anonymous, do not grant access
+
         if (!$user instanceof UserInterface) {
             return false;
         }

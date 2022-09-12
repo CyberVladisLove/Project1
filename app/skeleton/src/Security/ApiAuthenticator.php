@@ -32,7 +32,7 @@ class ApiAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        return false;
+        //return false;
         if($request->headers->has('token')) return true;
         else throw new InvalidCsrfTokenException("Введите ваш токен или залогиньтесь повторно");
     }
