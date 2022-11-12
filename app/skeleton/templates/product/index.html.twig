@@ -16,8 +16,6 @@
                 <th>Имя</th>
                 <th>Цена</th>
                 <th>Количество</th>
-                <th>Чек</th>
-                <th>Гости</th>
                 <th>Автор</th>
                 <th>Действия</th>
                 <th></th>
@@ -30,16 +28,6 @@
                 <td>{{ product.name }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.count }}</td>
-                <td>{{ product.cheque }}</td>
-                <td>
-
-                    <select id="ms" multiple="multiple" size="3" class="form-control" style="width: max-content">
-                        {% for guest in product.guests %}
-                            <option>{{ guest.name }}</option>
-                        {% endfor %}
-
-                    </select>
-                </td>
                 <td>{{ product.author }}</td>
                 <td>
                     <button style="margin: 5px">

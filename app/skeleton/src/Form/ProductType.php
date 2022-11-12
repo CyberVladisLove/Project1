@@ -34,17 +34,7 @@ class ProductType extends AbstractType
                     'attr'=> ['class' => 'input']
                 ]
             )
-            ->add('cheque', null, [
-                    'label' => "Чек",
-                    'attr'=> ['class' => 'input']
-                ]
-            )
-            ->add('guests',null, [
-                    'label' => "Гости",
-                    'attr'=> ['class' => 'input']
 
-                ]
-            )
 
         ;
     }

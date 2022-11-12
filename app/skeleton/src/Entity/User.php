@@ -31,29 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Guest::class)]
-    #[Ignore]
-    private Collection $AuthorForGuests;
-
-    #[ORM\OneToMany(mappedBy: 'byUser', targetEntity: Guest::class)]
-    #[Ignore]
-    private Collection $IsForGuests;
-
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Cheque::class)]
-    #[Ignore]
-    private Collection $authorForCheques;
-
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Product::class)]
     #[Ignore]
     private Collection $authorForProducts;
-
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Payment::class)]
-    #[Ignore]
-    private Collection $authorForPayments;
-
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Party::class)]
-    #[Ignore]
-    private Collection $authorForParties;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $token = null;
@@ -139,96 +119,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Guest>
-     */
-    public function getAuthorForGuests(): Collection
-    {
-        return $this->AuthorForGuests;
-    }
-
-    public function addGuest(Guest $guest): self
-    {
-        if (!$this->AuthorForGuests->contains($guest)) {
-            $this->AuthorForGuests->add($guest);
-            $guest->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGuest(Guest $guest): self
-    {
-        if ($this->AuthorForGuests->removeElement($guest)) {
-            // set the owning side to null (unless already changed)
-            if ($guest->getAuthor() === $this) {
-                $guest->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Guest>
-     */
-    public function getIsForGuests(): Collection
-    {
-        return $this->IsForGuests;
-    }
-
-    public function addForGuest(Guest $forGuest): self
-    {
-        if (!$this->IsForGuests->contains($forGuest)) {
-            $this->IsForGuests->add($forGuest);
-            $forGuest->setByUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeForGuest(Guest $forGuest): self
-    {
-        if ($this->IsForGuests->removeElement($forGuest)) {
-            // set the owning side to null (unless already changed)
-            if ($forGuest->getByUser() === $this) {
-                $forGuest->setByUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Cheque>
-     */
-    public function getAuthorForCheques(): Collection
-    {
-        return $this->authorForCheques;
-    }
-
-    public function addAuthorForCheque(Cheque $authorForCheque): self
-    {
-        if (!$this->authorForCheques->contains($authorForCheque)) {
-            $this->authorForCheques->add($authorForCheque);
-            $authorForCheque->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuthorForCheque(Cheque $authorForCheque): self
-    {
-        if ($this->authorForCheques->removeElement($authorForCheque)) {
-            // set the owning side to null (unless already changed)
-            if ($authorForCheque->getAuthor() === $this) {
-                $authorForCheque->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection<int, Product>
      */
     public function getAuthorForProducts(): Collection
@@ -252,66 +142,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($authorForProduct->getAuthor() === $this) {
                 $authorForProduct->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Payment>
-     */
-    public function getAuthorForPayments(): Collection
-    {
-        return $this->authorForPayments;
-    }
-
-    public function addAuthorForPayment(Payment $authorForPayment): self
-    {
-        if (!$this->authorForPayments->contains($authorForPayment)) {
-            $this->authorForPayments->add($authorForPayment);
-            $authorForPayment->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuthorForPayment(Payment $authorForPayment): self
-    {
-        if ($this->authorForPayments->removeElement($authorForPayment)) {
-            // set the owning side to null (unless already changed)
-            if ($authorForPayment->getAuthor() === $this) {
-                $authorForPayment->setAuthor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Party>
-     */
-    public function getAuthorForParties(): Collection
-    {
-        return $this->authorForParties;
-    }
-
-    public function addAuthorForParty(Party $authorForParty): self
-    {
-        if (!$this->authorForParties->contains($authorForParty)) {
-            $this->authorForParties->add($authorForParty);
-            $authorForParty->setAuthor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAuthorForParty(Party $authorForParty): self
-    {
-        if ($this->authorForParties->removeElement($authorForParty)) {
-
-            if ($authorForParty->getAuthor() === $this) {
-                $authorForParty->setAuthor(null);
             }
         }
 

@@ -18,32 +18,17 @@ class Product implements IHaveAuthor
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @Assert\NotBlank
-     */
     #[ORM\Column(length: 255)]
     //#[Groups(['indexCheque'])]
     private ?string $name = null;
 
-    /**
-     * @Assert\PositiveOrZero
-     */
     #[ORM\Column]
     //#[Groups(['indexCheque'])]
     private ?int $price = null;
 
-    /**
-     * @Assert\Positive
-     */
     #[ORM\Column]
     //#[Groups(['indexCheque'])]
     private ?float $count = null;
-
-    #[ORM\ManyToMany(cascade: ['persist'], targetEntity: Guest::class, mappedBy: 'products')]
-    private Collection $guests;
-
-    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'products')]
-    private ?Cheque $cheque = null;
 
     #[ORM\ManyToOne(inversedBy: 'authorForProducts')]
     private ?User $author = null;
